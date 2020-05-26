@@ -16,7 +16,7 @@ import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import { Link as MaterialLink } from '@material-ui/core'
 import Menu from './Menu';
 
-const logo = require('../images/logo.svg');
+const logo = require('../assets/images/logo.svg');
 
 const styles = theme => ({
   appBar: {
@@ -142,7 +142,7 @@ class Topbar extends Component {
                     <React.Fragment>
                       <div className={classes.productLogo}>
                         <Typography>
-                          A material UI Template
+                          فونت بیل
                         </Typography>
                       </div>
                       <div className={classes.iconContainer}>

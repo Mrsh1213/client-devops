@@ -1,5 +1,14 @@
+@font-face {
+  font-family: Yekan;
+  src: url('./assets/yekan-font/Yekan.eot');
+  src: url('./assets/yekan-font/Yekan.eot?#iefix') format('embedded-opentype'),
+  url('./assets/yekan-font/Yekan.woff') format('woff'),
+  url('./assets/yekan-font/Yekan.ttf') format('truetype');
+  font-weight: normal;
+}
 .App {
   text-align: center;
+  font-family: Yekan, serif ;
 }
 
 .App-logo {

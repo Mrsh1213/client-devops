@@ -18,11 +18,18 @@
     "query-string": "^6.2.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-redux": "^7.2.0",
     "react-router-dom": "^5.0.1",
     "react-scripts": "^3.4.1",
+    "react-stomp": "^5.0.0",
+    "react-stomp-client": "^1.2.0",
     "react-swipeable-views": "^0.13.0",
     "react-swipeable-views-utils": "^0.13.0",
-    "recharts": "^1.3.5"
+    "recharts": "^1.3.5",
+    "redux": "^4.0.5",
+    "socket.io-client": "^2.3.0",
+    "sockjs-client": "^1.4.0",
+    "stompjs": "^2.3.3"
   },
   "scripts": {
     "start": "react-scripts start",

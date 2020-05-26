@@ -13,7 +13,7 @@ import Topbar from './Topbar';
 import Main from "./Main";
 import SideBar from "./Layout/SideBar";
 
-const backgroundShape = require('../images/shape.svg');
+const backgroundShape = require('../assets/images/shape.svg');
 
 const styles = theme => ({
     root: {

@@ -5,7 +5,6 @@ import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
@@ -14,14 +13,16 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import {Grid} from '@material-ui/core';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
+import {GroupWork, Message} from '@material-ui/icons';
 import MailIcon from '@material-ui/icons/Mail';
 import Collapse from "@material-ui/core/Collapse";
 import {ExpandLess, ExpandMore} from "@material-ui/icons";
 
-const drawerWidth = 240;
+import AvatarStatus from "./parts/AvatarStatus";
 
+const drawerWidth = 200;
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
@@ -34,7 +35,8 @@ const useStyles = makeStyles((theme) => ({
         }),
         boxShadow: 'none',
         borderBottom: `1px solid ${theme.palette.grey['100']}`,
-        backgroundColor: 'white',
+        minHeight:"unset"
+        // backgroundColor: '#003d3f',
     },
     appBarShift: {
         marginLeft: drawerWidth,
@@ -43,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
         }),
+        minHeight:"unset"
     },
     menuButton: {
         marginRight: 36,
@@ -50,10 +53,24 @@ const useStyles = makeStyles((theme) => ({
     hide: {
         display: 'none',
     },
+    drawerPaper: {
+        // backgroundColor: '#003d3f',
+        // color: "#c1c325"
+    },
+    drawerIcon: {
+        // color: "#c1c325",
+        minWidth: 42,
+    },
+    drawerIconChild: {
+        // color: "#c1c325",
+        flexDirection: 'row-reverse',
+        paddingLeft: 8,
+        paddingRight: 8
+    },
     drawer: {
         width: drawerWidth,
         flexShrink: 0,
-        whiteSpace: 'nowrap',
+        whiteSpace: 'nowrap'
     },
     drawerOpen: {
         width: drawerWidth,
@@ -85,21 +102,28 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         padding: theme.spacing(3),
     },
+    iconButton: {
+        padding: 2
+    }
 }));
 
 export default function MiniDrawer() {
     const classes = useStyles();
     const theme = useTheme();
-    const [expandGroup,setExpandGroup]=useState(false);
+    const [expandGroup, setExpandGroup] = useState(false);
+    const [expandPM, setExpandPM] = useState(false);
     const [open, setOpen] = React.useState(false);
 
     const handleDrawerOpen = () => {
         setOpen(true);
     };
     const handleExpand = (id) => {
-        switch(id) {
+        switch (id) {
             case "expandGroup":
-                setExpandGroup(v=>!v);
+                setExpandGroup(v => !v);
+                break;
+            case "expandPM":
+                setExpandPM(v => !v);
                 break;
 
         }
@@ -108,6 +132,8 @@ export default function MiniDrawer() {
 
     const handleDrawerClose = () => {
         setOpen(false);
+        setExpandGroup(false)
+        setExpandPM(false)
     };
 
     return (
@@ -120,20 +146,28 @@ export default function MiniDrawer() {
                 })}
             >
                 <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        className={clsx(classes.menuButton, {
-                            [classes.hide]: open,
-                        })}
-                    >
-                        <MenuIcon/>
-                    </IconButton>
-                    <Typography variant="h6" noWrap>
-                        Mini variant drawer
-                    </Typography>
+                    <Grid container>
+
+                        <Grid md={3} xs={2}>
+                            <IconButton
+                                color="inherit"
+                                aria-label="open drawer"
+                                onClick={handleDrawerOpen}
+                                edge="start"
+                                className={clsx(classes.menuButton, {
+                                    [classes.hide]: open,
+                                })}
+                            >
+                                <MenuIcon/>
+                            </IconButton>
+                        </Grid>
+                        <Grid md={7} xs={6} />
+                        <Grid md={2} xs={4}>
+                            <Typography style={{fontSize:"calc(10px + 1vw)"}} dir={"ltr"} variant="h6" noWrap>
+                                Mini variant drawer
+                            </Typography>
+                        </Grid>
+                    </Grid>
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -143,53 +177,92 @@ export default function MiniDrawer() {
                     [classes.drawerClose]: !open,
                 })}
                 classes={{
-                    paper: clsx({
+                    paper: clsx(classes.drawerPaper, {
                         [classes.drawerOpen]: open,
                         [classes.drawerClose]: !open,
                     }),
                 }}
             >
+
                 <div className={classes.toolbar}>
-                    <IconButton onClick={handleDrawerClose}>
+                    <div style={{
+                        width: "100%", display: "flex",
+                        alignItems: "center"
+                    }}>
+                        <AvatarStatus/>
+                        <Typography variant={"caption"} style={{padding: 5}}>سیدمحمدرضاشوبیری</Typography>
+                    </div>
+                    <IconButton className={classes.iconButton} onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
                     </IconButton>
                 </div>
                 <Divider/>
-                <ListItem  button onClick={()=>{handleExpand("expandGroup")}}>
-                    <ListItemIcon>
-                        <InboxIcon />
+                <ListItem button onClick={() => {
+                    handleExpand("expandGroup")
+                }}>
+                    <ListItemIcon className={classes.drawerIcon}>
+                        <GroupWork/>
                     </ListItemIcon>
-                    <ListItemText primary="فضا های کاری " />
-                    {expandGroup ? <ExpandLess /> : <ExpandMore />}
+                    <ListItemText primary="گروه ها"/>
+                    {expandGroup ? <ExpandLess/> : <ExpandMore/>}
                 </ListItem>
                 <Collapse in={expandGroup} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        <ListItem button className={classes.nested}>
-                            <ListItemIcon>
-                                ICONS
+                        <ListItem button>
+                            <ListItemIcon className={classes.drawerIconChild}>
+                                #
                             </ListItemIcon>
-                            <ListItemText primary="Starred" />
+                            <Typography variant={"body2"}>اقدامات(ACM)</Typography>
                         </ListItem>
                     </List>
                 </Collapse>
                 <Divider/>
-                <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
-                            <ListItemText primary={text}/>
+                <ListItem button onClick={() => {
+                    handleExpand("expandPM")
+                }}>
+                    <ListItemIcon className={classes.drawerIcon}>
+                        <Message/>
+                    </ListItemIcon>
+                    <ListItemText primary="پیام خصوصی"/>
+                    {expandPM ? <ExpandLess/> : <ExpandMore/>}
+                </ListItem>
+                <Collapse in={expandPM} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                        <ListItem button>
+                            <ListItemIcon className={classes.drawerIconChild}>
+                                <AvatarStatus size={27}/>
+                            </ListItemIcon>
+                            <Typography variant={"body2"}>علیرضا گودرزی</Typography>
                         </ListItem>
-                    ))}
-                </List>
+                        <ListItem button>
+                            <ListItemIcon className={classes.drawerIconChild}>
+                                <AvatarStatus size={27}/>
+                            </ListItemIcon>
+                            <Typography variant={"body2"}>علیرضا گودرزی</Typography>
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon className={classes.drawerIconChild}>
+                                <AvatarStatus size={27}/>
+                            </ListItemIcon>
+                            <Typography variant={"body2"}>علیرضا گودرزی</Typography>
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon className={classes.drawerIconChild}>
+                                <AvatarStatus size={27}/>
+                            </ListItemIcon>
+                            <Typography variant={"body2"}>علیرضا گودرزی</Typography>
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon className={classes.drawerIconChild}>
+                                <AvatarStatus size={27}/>
+                            </ListItemIcon>
+                            <Typography variant={"body2"}>علیرضا گودرزی</Typography>
+                        </ListItem>
+                    </List>
+                </Collapse>
                 <Divider/>
-                <List>
-                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
-                            <ListItemText primary={text}/>
-                        </ListItem>
-                    ))}
-                </List>
+
+
             </Drawer>
         </>
 

@@ -3,7 +3,7 @@ import withStyles from '@material-ui/styles/withStyles';
 import {BrowserRouter as Router, withRouter} from 'react-router-dom';
 import Routes from "../routes";
 
-const backgroundShape = require('../images/shape.svg');
+const backgroundShape = require('../assets/images/shape.svg');
 
 const styles = theme => ({
   root: {
@@ -89,9 +89,10 @@ class Main extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <>
+      <div style={{paddingTop: 46,
+        paddingRight: 60}}>
           <Routes/>
-      </>
+      </div>
     )
   }
 }
