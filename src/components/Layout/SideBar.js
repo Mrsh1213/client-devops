@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import clsx from 'clsx';
 import {makeStyles, useTheme} from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -21,6 +21,8 @@ import Collapse from "@material-ui/core/Collapse";
 import {ExpandLess, ExpandMore} from "@material-ui/icons";
 
 import AvatarStatus from "./parts/AvatarStatus";
+import {SocketContext} from "../../config/SocketContext";
+import {connect} from "react-redux";
 
 const drawerWidth = 200;
 const useStyles = makeStyles((theme) => ({
@@ -107,9 +109,11 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function MiniDrawer() {
+function MiniDrawer(props) {
+    const {appReducer}=props;
     const classes = useStyles();
     const theme = useTheme();
+    let stompClient = useContext(SocketContext);
     const [expandGroup, setExpandGroup] = useState(false);
     const [expandPM, setExpandPM] = useState(false);
     const [open, setOpen] = React.useState(false);
@@ -148,7 +152,7 @@ export default function MiniDrawer() {
                 <Toolbar>
                     <Grid container>
 
-                        <Grid md={3} xs={2}>
+                        <Grid md={3} xs={2} item>
                             <IconButton
                                 color="inherit"
                                 aria-label="open drawer"
@@ -161,8 +165,8 @@ export default function MiniDrawer() {
                                 <MenuIcon/>
                             </IconButton>
                         </Grid>
-                        <Grid md={7} xs={6} />
-                        <Grid md={2} xs={4}>
+                        <Grid md={7} xs={6} item/>
+                        <Grid md={2} xs={4} item>
                             <Typography style={{fontSize:"calc(10px + 1vw)"}} dir={"ltr"} variant="h6" noWrap>
                                 Mini variant drawer
                             </Typography>
@@ -189,7 +193,7 @@ export default function MiniDrawer() {
                         width: "100%", display: "flex",
                         alignItems: "center"
                     }}>
-                        <AvatarStatus/>
+                        <AvatarStatus status={appReducer.status}/>
                         <Typography variant={"caption"} style={{padding: 5}}>سیدمحمدرضاشوبیری</Typography>
                     </div>
                     <IconButton className={classes.iconButton} onClick={handleDrawerClose}>
@@ -268,3 +272,8 @@ export default function MiniDrawer() {
 
     );
 }
+
+const mapStateToProps = state => ({
+    appReducer: state.appReducer
+});
+export default  connect(mapStateToProps)(MiniDrawer)

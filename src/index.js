@@ -11,18 +11,20 @@ import rootReducer from './redux/reducers'
 import theme from "./config/theme";
 import {jssPreset, StylesProvider} from '@material-ui/core/styles'
 import rtl from 'jss-rtl';
+import SocketProvider from "./config/SocketContext";
 
 const jss = create({plugins: [...jssPreset().plugins, rtl()]});
 const store = createStore(rootReducer);
 ReactDOM.render(
-
-        <ThemeProvider theme={theme}>
-            <StylesProvider jss={jss}>
-                <Provider store={store}>
-                <App/>
-                </Provider>
-            </StylesProvider>
-        </ThemeProvider>
+    <ThemeProvider theme={theme}>
+        <StylesProvider jss={jss}>
+            <Provider store={store}>
+                <SocketProvider>
+                    <App/>
+                </SocketProvider>
+            </Provider>
+        </StylesProvider>
+    </ThemeProvider>
 
     , document.getElementById('root'));
 

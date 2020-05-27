@@ -1,21 +1,32 @@
-import React,{useEffect,useState,useRef} from 'react';
-import {} from '../../redux/actions/gitlabAction';
+import React, {useEffect, useState, useRef, useContext} from 'react';
 import CardSystem from "../../components/common/CardSystem";
-Index.propTypes = {
+import Grid from "@material-ui/core/Grid";
+import {SocketContext} from "../../config/SocketContext";
 
-};
+Index.propTypes = {};
 
 
 function Index(props) {
+
     const [response, setResponse] = useState("");
+    const stompClient=useContext(SocketContext);
 
 
     return (
-        <>
-
-            <CardSystem/>
-
-        </>
+        <Grid container spacing={6}>
+            <Grid xs={6} md={4} lg={3} item>
+                <CardSystem/>
+            </Grid>
+            <Grid xs={6} md={4} lg={3} item>
+                <CardSystem/>
+            </Grid>
+            <Grid xs={6} md={4} lg={3} item>
+                <CardSystem/>
+            </Grid>
+            <Grid xs={6} md={4} lg={3} item>
+                <CardSystem/>
+            </Grid>
+        </Grid>
     );
 }
 

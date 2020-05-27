@@ -2,6 +2,7 @@ import {Avatar, Badge, withStyles} from "@material-ui/core";
 import React, {useState} from "react";
 import jpg from "../../../assets/images/1.jpg";
 import PropTypes from 'prop-types';
+import {connect} from "react-redux";
 
 const StyledBadgeOnline = withStyles((theme) => ({
     badge: {
@@ -62,18 +63,15 @@ const StyledBadgeOffline = withStyles((theme) => ({
 
 AvatarStatus.propTypes = {
     img:PropTypes.any,
+    status:PropTypes.bool,
     size:PropTypes.any
 };
 
-export default function AvatarStatus(props){
-    const {size,img,}=props;
-    const [isOnline, setOnline] = useState(false);
+ function AvatarStatus(props){
+    const {size,img,status}=props;
     return (
-        isOnline ?
+        status ?
             <StyledBadgeOnline
-                onClick={() => {
-                    setOnline(preV => !preV)
-                }}
                 overlap="circle"
                 anchorOrigin={{
                     vertical: 'bottom',
@@ -84,9 +82,6 @@ export default function AvatarStatus(props){
                 <Avatar style={{height:size?size:40,width:size?size:40}} alt="Remy Sharp" src={jpg}/>
             </StyledBadgeOnline>
             : <StyledBadgeOffline
-                onClick={() => {
-                    setOnline(preV => !preV)
-                }}
                 overlap="circle"
                 anchorOrigin={{
                     vertical: 'bottom',
@@ -98,3 +93,5 @@ export default function AvatarStatus(props){
             </StyledBadgeOffline>
     )
 }
+
+export default (AvatarStatus);
