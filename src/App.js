@@ -13,15 +13,9 @@ import {setOnlineSocket} from "./redux/actions/appAction";
 
 
 function App(props) {
-    const {setReqJira} = props;
-    const clientRef=useRef({client:{connected:false}});
+    // const {setReqJira} = props;
+    // const clientRef=useRef({client:{connected:false}});
     // clientRef.current.client.connected=false;
-    useEffect(()=>{
-        console.log(clientRef.current.client.connected);
-        console.log(clientRef.current);
-        setOnlineSocket(clientRef.current.client.connected)
-    },[clientRef.current.client.connected])
-    let stompClient = useContext(SocketContext);
     // const [msg,setMsg]=useState("");
     // useEffect(()=>{
     //     console.log("create Appp");
@@ -39,44 +33,23 @@ function App(props) {
     return (
         <>
             <Router>
-                <SockJsClient
-                    onDisconnect={()=>{setOnlineSocket(false)}}
-                    onConnect={()=>{setOnlineSocket(true)}}
+            {/*    <SockJsClient*/}
+            {/*        onDisconnect={()=>{setOnlineSocket(false)}}*/}
+            {/*        onConnect={()=>{setOnlineSocket(true)}}*/}
 
 
-                     url="http://172.25.113.36:8282/ws-publisher/" topics={['/topic/jira']}
-                              onMessage={(msg) => {
-                                  console.log("msg jira", msg);
-                                  setReqJira(msg)
-                              }}
+            {/*         url="http://mohammad1213.dlinkddns.com:8282/ws-publisher/" topics={['/topic/jira']}*/}
+            {/*                  onMessage={(msg) => {*/}
+            {/*                      console.log("msg jira", msg);*/}
+            {/*                      setReqJira(msg)*/}
+            {/*                  }}*/}
 
-                ref={(client) => {
-                clientRef.current = client
-            }}
+            {/*    ref={(client) => {*/}
+            {/*    clientRef.current = client*/}
+            {/*}}*/}
 
-                />
-                <button style={{padding: "100px"}} onClick={() => {
-                    console.log(stompClient.connected);
-                    // stompClient.disconnect()
-                    // console.log(stompClient);
-                }}>disconnect
-                </button>
-                <button style={{padding: "100px"}} onClick={() => {
-
-
-                }}>connect
-                </button>
-                <button style={{padding: "100px"}} onClick={() => {
-                    stompClient.subscribe('/topic/jira.acm', function (message) {
-                        // setResponse(greeting)
-                        console.log("/topic/jira.acm ", message);
-                        setReqJira(message)
-                        //you can execute any function here
-                    });
-                }}>/topic/jira.acm
-                </button>
+            {/*    />*/}
                 <Switch>
-
                     <Route path='/dashboard' component={Dashboard}/>
                 </Switch>
             </Router>

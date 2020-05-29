@@ -1,7 +1,7 @@
 import {createMuiTheme, responsiveFontSizes} from '@material-ui/core/styles'
 import {blue, indigo} from '@material-ui/core/colors'
 
- const theme=createMuiTheme({
+const theme = createMuiTheme({
     palette: {
         secondary: {
             main: blue[900]
@@ -20,12 +20,18 @@ import {blue, indigo} from '@material-ui/core/colors'
         ].join(',')
     },
     overrides: {
-        MuiTypography:{
-            body1:{
+        MuiTypography: {
+            body1: {
                 fontSize: '0.9rem'
             },
-            body2:{
+            body2: {
                 fontSize: '0.7rem'
+            }
+        },
+        MuiToolbar: {
+            gutters: {
+                paddingRight: '16px !important',
+                paddingLeft: '16px !important'
             }
         },
 

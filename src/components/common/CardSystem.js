@@ -8,46 +8,42 @@ import CardActions from "@material-ui/core/CardActions";
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
 import {Link} from "react-router-dom";
-import jiraReducer from "../../redux/reducers/jiraReducer";
 import {connect} from "react-redux";
-import {SocketContext} from "../../config/SocketContext";
-import appReducer from "../../redux/reducers/appReducer";
-import JiraPage from "../../views/Dashboard/JiraPage";
-import {setOnlineSocket} from "../../redux/actions/appAction";
-
+import Avatar from "@material-ui/core/Avatar";
+import Grid from "@material-ui/core/Grid";
+import {withStyles} from '@material-ui/core/styles';
+import Badge from "@material-ui/core/Badge";
+import IconButton from "@material-ui/core/IconButton";
 
 CardSystem.propTypes = {};
+const StyledBadge = withStyles((theme) => ({
+    badge: {
+        right: -3,
+        top: 13,
+        border: `2px solid ${theme.palette.background.paper}`,
+        padding: '0 4px',
+        width: 40,
+        height: 40,
+        borderRadius: '50%',
+        fontSize: '1rem',
+    },
+}))(Badge);
 
 function CardSystem(props) {
     const {jiraData} = props;
-    // const stompClient=useContext(SocketContext);
     return (
-        <Card>
-            <CardActionArea>
-                <CardMedia
-                    image="./jira-baner.png"
-                    title="Contemplative Reptile"
-                />
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
-                        درخواست جیرا
-                    </Typography>
-                    {jiraData!==""?jiraData:""}
-                </CardContent>
-            </CardActionArea>
-            <CardActions>
-                <Button onClick={()=>{
-                    // console.log("stompClient ",stompClient);
-                    // stompClient.unsubscribe("App")
-                }} size="small" color="primary">
-                    بیشتر
-                </Button>
-                <Link to={"/workspace"}>workspace</Link>
-                <Link to={"/JiraPage"}>JiraPage</Link>
-            </CardActions>
-        </Card>
+        <>
+            <IconButton color={"secondary"}
+                        style={{width: '8rem', height: '8rem', backgroundImage: "url('./jira-baner.png')",backgroundRepeat: 'no-repeat',backgroundSize: "cover"}}
+                        aria-label="cart">
+                <StyledBadge style={{width: '80%', height: '80%'}} badgeContent={4} color="error">
+                </StyledBadge>
+            </IconButton>
+<div>درخواست جیرا</div>
+        </>
     );
 }
+
 const mapStateToProps = state => ({
     jiraData: state.jiraReducer
 })

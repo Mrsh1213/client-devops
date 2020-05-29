@@ -8,22 +8,18 @@ Index.propTypes = {};
 
 function Index(props) {
 
-    const [response, setResponse] = useState("");
-    const stompClient=useContext(SocketContext);
-
-
     return (
-        <Grid container spacing={6}>
-            <Grid xs={6} md={4} lg={3} item>
+        <Grid style={{textAlign:"center"}} container spacing={1} >
+            <Grid  xs={4} md={4} lg={3} item>
                 <CardSystem/>
             </Grid>
-            <Grid xs={6} md={4} lg={3} item>
+            <Grid  xs={4} md={4} lg={3} item>
                 <CardSystem/>
             </Grid>
-            <Grid xs={6} md={4} lg={3} item>
+            <Grid  xs={4} md={4} lg={3} item>
                 <CardSystem/>
             </Grid>
-            <Grid xs={6} md={4} lg={3} item>
+            <Grid  xs={4} md={4} lg={3} item>
                 <CardSystem/>
             </Grid>
         </Grid>

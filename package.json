@@ -1,8 +1,7 @@
 {
-  "name": "material-sense",
+  "name": "client-devops",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://alexanmtz.github.io/material-sense",
   "dependencies": {
     "@material-ui/core": "^4.10.0",
     "@material-ui/icons": "^4.9.1",
@@ -27,7 +26,6 @@
     "react-swipeable-views-utils": "^0.13.0",
     "recharts": "^1.3.5",
     "redux": "^4.0.5",
-    "socket.io-client": "^2.3.0",
     "sockjs-client": "^1.4.0",
     "stompjs": "^2.3.3"
   },
@@ -48,9 +46,5 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ],
-  "collective": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/material-sense"
-  }
+  ]
 }

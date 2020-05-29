@@ -23,6 +23,7 @@ import {ExpandLess, ExpandMore} from "@material-ui/icons";
 import AvatarStatus from "./parts/AvatarStatus";
 import {SocketContext} from "../../config/SocketContext";
 import {connect} from "react-redux";
+import {setOpenDrawer} from "../../redux/actions/appAction";
 
 const drawerWidth = 200;
 const useStyles = makeStyles((theme) => ({
@@ -36,8 +37,9 @@ const useStyles = makeStyles((theme) => ({
             duration: theme.transitions.duration.leavingScreen,
         }),
         boxShadow: 'none',
-        borderBottom: `1px solid ${theme.palette.grey['100']}`,
-        minHeight:"unset"
+        minHeight: "unset",
+        backgroundColor: '#f8ceec',
+        backgroundImage: 'linear-gradient(200deg, #f8ceec 0%, #a88beb 74%)',
         // backgroundColor: '#003d3f',
     },
     appBarShift: {
@@ -47,15 +49,14 @@ const useStyles = makeStyles((theme) => ({
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
         }),
-        minHeight:"unset"
-    },
-    menuButton: {
-        marginRight: 36,
+        minHeight: "unset"
     },
     hide: {
         display: 'none',
     },
     drawerPaper: {
+        backgroundColor: '#f8ceec',
+        backgroundImage: 'linear-gradient(135deg, #f8ceec 0%, #a88beb 74%)',
         // backgroundColor: '#003d3f',
         // color: "#c1c325"
     },
@@ -98,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'flex-end',
         padding: theme.spacing(0, 1),
         // necessary for content to be below app bar
-        ...theme.mixins.toolbar,
+        ...theme.mixins.toolbar
     },
     content: {
         flexGrow: 1,
@@ -106,20 +107,28 @@ const useStyles = makeStyles((theme) => ({
     },
     iconButton: {
         padding: 2
+    },
+    topbar: {
+        minHeight: 45
     }
 }));
 
 function MiniDrawer(props) {
-    const {appReducer}=props;
+    const {appReducer,open,setOpenDrawer} = props;
+    // const {open}=appReducer;
     const classes = useStyles();
     const theme = useTheme();
     let stompClient = useContext(SocketContext);
     const [expandGroup, setExpandGroup] = useState(false);
     const [expandPM, setExpandPM] = useState(false);
-    const [open, setOpen] = React.useState(false);
+    // const [open, setOpen] = React.useState(false);
 
     const handleDrawerOpen = () => {
-        setOpen(true);
+        if (open) {
+            setExpandGroup(false)
+            setExpandPM(false)
+        }
+        setOpenDrawer(!open)
     };
     const handleExpand = (id) => {
         switch (id) {
@@ -131,14 +140,9 @@ function MiniDrawer(props) {
                 break;
 
         }
-        setOpen(true);
+        setOpenDrawer(true);
     };
 
-    const handleDrawerClose = () => {
-        setOpen(false);
-        setExpandGroup(false)
-        setExpandPM(false)
-    };
 
     return (
         <>
@@ -149,7 +153,7 @@ function MiniDrawer(props) {
                     [classes.appBarShift]: open,
                 })}
             >
-                <Toolbar>
+                <Toolbar className={classes.topbar}>
                     <Grid container>
 
                         <Grid md={3} xs={2} item>
@@ -158,16 +162,13 @@ function MiniDrawer(props) {
                                 aria-label="open drawer"
                                 onClick={handleDrawerOpen}
                                 edge="start"
-                                className={clsx(classes.menuButton, {
-                                    [classes.hide]: open,
-                                })}
                             >
-                                <MenuIcon/>
+                                {!open ? <MenuIcon/> : <ChevronRightIcon/>}
                             </IconButton>
                         </Grid>
                         <Grid md={7} xs={6} item/>
                         <Grid md={2} xs={4} item>
-                            <Typography style={{fontSize:"calc(10px + 1vw)"}} dir={"ltr"} variant="h6" noWrap>
+                            <Typography style={{fontSize: "calc(4px + 1vw)"}} dir={"ltr"} variant="h6" noWrap>
                                 Mini variant drawer
                             </Typography>
                         </Grid>
@@ -188,7 +189,7 @@ function MiniDrawer(props) {
                 }}
             >
 
-                <div className={classes.toolbar}>
+                {open ? <div className={classes.toolbar}>
                     <div style={{
                         width: "100%", display: "flex",
                         alignItems: "center"
@@ -196,10 +197,7 @@ function MiniDrawer(props) {
                         <AvatarStatus status={appReducer.status}/>
                         <Typography variant={"caption"} style={{padding: 5}}>سیدمحمدرضاشوبیری</Typography>
                     </div>
-                    <IconButton className={classes.iconButton} onClick={handleDrawerClose}>
-                        {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
-                    </IconButton>
-                </div>
+                </div> : <div style={{padding: 23}}/>}
                 <Divider/>
                 <ListItem button onClick={() => {
                     handleExpand("expandGroup")
@@ -274,6 +272,10 @@ function MiniDrawer(props) {
 }
 
 const mapStateToProps = state => ({
-    appReducer: state.appReducer
+    appReducer: state.appReducer,
+    open: state.appReducer.openDrawer
 });
-export default  connect(mapStateToProps)(MiniDrawer)
+const mapDispatchToProps = dispatch => ({
+    setOpenDrawer: open => dispatch(setOpenDrawer(open)),
+});
+export default connect(mapStateToProps,mapDispatchToProps)(MiniDrawer)
