@@ -13,3 +13,7 @@ idea/
 /.idea/vcs.xml
 /yarn.lock
 /.idea/.gitignore
+/public/1.jpg
+/.idea/client-devops.iml
+/.idea/dbnavigator.xml
+/.idea/codeStyles/Project.xml
