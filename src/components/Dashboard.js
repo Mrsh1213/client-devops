@@ -12,7 +12,6 @@ class Dashboard extends Component {
         return (
             <Router basename={"/dashboard"}>
                 <SideBar/>
-                <Main/>
             </Router>
         )
     }

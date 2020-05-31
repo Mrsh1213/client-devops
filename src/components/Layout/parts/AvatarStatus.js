@@ -3,7 +3,9 @@ import React, {useState} from "react";
 import jpg from "../../../assets/images/1.jpg";
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
-
+import theme from "../../../config/theme";
+import withWidth from "@material-ui/core/withWidth";
+import {makeStyles} from "@material-ui/styles";
 const StyledBadgeOnline = withStyles((theme) => ({
     badge: {
         backgroundColor: '#44b700',
@@ -60,7 +62,17 @@ const StyledBadgeOffline = withStyles((theme) => ({
         },
     },
 }))(Badge);
-
+const useStyles = makeStyles((theme) => ({
+    avatar: {
+        [theme.breakpoints.down('md')]: {
+            width:'5rem',
+            height:'5rem',
+        },[theme.breakpoints.up('md')]: {
+            width:'2.5rem',
+            height:'2.5rem',
+        }
+    },
+}));
 AvatarStatus.propTypes = {
     img:PropTypes.any,
     status:PropTypes.bool,
@@ -68,8 +80,11 @@ AvatarStatus.propTypes = {
 };
 
  function AvatarStatus(props){
-    const {size,img,status}=props;
+     const classes=useStyles();
+
+     const {size,img,status,width}=props;
     return (
+
         status ?
             <StyledBadgeOnline
                 overlap="circle"
@@ -79,7 +94,7 @@ AvatarStatus.propTypes = {
                 }}
                 variant="dot"
             >
-                <Avatar style={{height:size?size:40,width:size?size:40}} alt="Remy Sharp" src={jpg}/>
+                <Avatar className={classes.avatar} alt="Remy Sharp" src={jpg}/>
             </StyledBadgeOnline>
             : <StyledBadgeOffline
                 overlap="circle"
@@ -89,9 +104,10 @@ AvatarStatus.propTypes = {
                 }}
                 variant="dot"
             >
-                <Avatar style={{height:size?size:40,width:size?size:40}} alt="Remy Sharp" sizes="" src={img?img:jpg}/>
+                {console.log(width)}
+                <Avatar className={classes.avatar} alt="Remy Sharp" src={jpg}/>
             </StyledBadgeOffline>
     )
 }
 
-export default (AvatarStatus);
+export default withWidth()(AvatarStatus);

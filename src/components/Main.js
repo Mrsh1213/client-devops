@@ -7,8 +7,8 @@ import {connect} from "react-redux";
 function Main (props){
  const {open}=props;
     return (
-      <div style={{height:'calc(-68px + 100vh)',backgroundImage:"url('./shape.svg')",marginTop: 54,
-        marginRight: open?200:57}}>
+      <div style={{height:'calc(-68px + 100vh)',marginTop: 54,
+        marginRight: open?250:57}}>
           <Routes/>
       </div>
     )

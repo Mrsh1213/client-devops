@@ -1,281 +1,194 @@
-import React, {useContext, useState} from 'react';
-import clsx from 'clsx';
-import {makeStyles, useTheme} from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
+import React from 'react';
+import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
+import Drawer from '@material-ui/core/Drawer';
+import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import {Grid} from '@material-ui/core';
 import ListItemText from '@material-ui/core/ListItemText';
-import {GroupWork, Message} from '@material-ui/icons';
 import MailIcon from '@material-ui/icons/Mail';
-import Collapse from "@material-ui/core/Collapse";
-import {ExpandLess, ExpandMore} from "@material-ui/icons";
-
+import MenuIcon from '@material-ui/icons/Menu';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import {makeStyles, useTheme} from '@material-ui/core/styles';
+import Grid from "@material-ui/core/Grid";
 import AvatarStatus from "./parts/AvatarStatus";
-import {SocketContext} from "../../config/SocketContext";
-import {connect} from "react-redux";
-import {setOpenDrawer} from "../../redux/actions/appAction";
+import {GroupWork,History,Settings,} from "@material-ui/icons";
+import Routes from "../../routes";
 
-const drawerWidth = 200;
+const drawerWidth = 280;
+
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
     },
-    appBar: {
-        zIndex: theme.zIndex.drawer + 1,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        boxShadow: 'none',
-        minHeight: "unset",
-        backgroundColor: '#f8ceec',
-        backgroundImage: 'linear-gradient(200deg, #f8ceec 0%, #a88beb 74%)',
-        // backgroundColor: '#003d3f',
-    },
-    appBarShift: {
-        marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-        minHeight: "unset"
-    },
-    hide: {
-        display: 'none',
-    },
-    drawerPaper: {
-        backgroundColor: '#f8ceec',
-        backgroundImage: 'linear-gradient(135deg, #f8ceec 0%, #a88beb 74%)',
-        // backgroundColor: '#003d3f',
-        // color: "#c1c325"
-    },
-    drawerIcon: {
-        // color: "#c1c325",
-        minWidth: 42,
-    },
-    drawerIconChild: {
-        // color: "#c1c325",
-        flexDirection: 'row-reverse',
-        paddingLeft: 8,
-        paddingRight: 8
-    },
     drawer: {
-        width: drawerWidth,
-        flexShrink: 0,
-        whiteSpace: 'nowrap'
-    },
-    drawerOpen: {
-        width: drawerWidth,
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    },
-    drawerClose: {
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        overflowX: 'hidden',
-        width: theme.spacing(7) + 1,
-        [theme.breakpoints.up('sm')]: {
-            width: theme.spacing(7) + 1,
+        [theme.breakpoints.up('md')]: {
+            width: drawerWidth,
+            flexShrink: 0,
         },
     },
+    appBar: {
+        [theme.breakpoints.down('md')]: {
+            height: 100
+        },
+        [theme.breakpoints.up('md')]: {
+            height: 64,
+            width: `calc(100% - ${drawerWidth}px)`,
+            marginLeft: drawerWidth,
+        },
+    },
+    menuButton: {
+        marginRight: theme.spacing(2),
+        [theme.breakpoints.up('md')]: {
+            display: 'none',
+        },
+    },
+    // necessary for content to be below app bar
+    topbar: {
+        backgroundImage: 'linear-gradient(to left, #0f2027, #203a43, #2c5364)',
+        minHeight: "100%",
+        color: "#ffffff"
+    },
     toolbar: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        padding: theme.spacing(0, 1),
-        // necessary for content to be below app bar
+
         ...theme.mixins.toolbar
+    },
+    drawerPaper: {
+        backgroundImage: 'linear-gradient(to left, #0f2027, #203a43, #2c5364)',
+        width: drawerWidth,
     },
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
     },
-    iconButton: {
-        padding: 2
+    drawerIcon: {
+        // color: "#c1c325",
+        minWidth: 42,
+        color: "#ffffff"
     },
-    topbar: {
-        minHeight: 45
-    }
 }));
-
-function MiniDrawer(props) {
-    const {appReducer,open,setOpenDrawer} = props;
-    // const {open}=appReducer;
+const drawerRouter=[
+    {text:'مرور فعالیت ها',route:"/",icon:History}  ,
+    {text:'یادآوری',route:"/",icon:GroupWork}  ,
+    {text:'مدیریت تیم کاری',route:"/",icon:GroupWork}  ,
+    {text:'تنظیمات',route:"/",icon:GroupWork}  ,
+];
+function SideBar(props) {
+    const {window} = props;
     const classes = useStyles();
     const theme = useTheme();
-    let stompClient = useContext(SocketContext);
-    const [expandGroup, setExpandGroup] = useState(false);
-    const [expandPM, setExpandPM] = useState(false);
-    // const [open, setOpen] = React.useState(false);
+    const [mobileOpen, setMobileOpen] = React.useState(false);
 
-    const handleDrawerOpen = () => {
-        if (open) {
-            setExpandGroup(false)
-            setExpandPM(false)
-        }
-        setOpenDrawer(!open)
-    };
-    const handleExpand = (id) => {
-        switch (id) {
-            case "expandGroup":
-                setExpandGroup(v => !v);
-                break;
-            case "expandPM":
-                setExpandPM(v => !v);
-                break;
-
-        }
-        setOpenDrawer(true);
+    const handleDrawerToggle = () => {
+        setMobileOpen(!mobileOpen);
     };
 
+    const drawer = (
+        <div>
+            <div className={classes.toolbar}/>
+            <Divider/>
+            <List>
+                {drawerRouter.map((item, index) => (
+                    <ListItem key={item.text} button onClick={() => {
+
+                    }}>
+                        <ListItemIcon className={classes.drawerIcon}>
+                            <item.icon/>
+                        </ListItemIcon>
+                        <ListItemText primary={item.text}/>
+                    </ListItem>
+                ))}
+            </List>
+            <Divider style={{backgroundColor:"#fff"}}/>
+        </div>
+    );
+
+    const container = window !== undefined ? () => window().document.body : undefined;
 
     return (
-        <>
-
-            <AppBar
-                position="fixed" color="default"
-                className={clsx(classes.appBar, {
-                    [classes.appBarShift]: open,
-                })}
-            >
+        <div className={classes.root}>
+            <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar className={classes.topbar}>
-                    <Grid container>
-
-                        <Grid md={3} xs={2} item>
+                    <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        edge="start"
+                        onClick={handleDrawerToggle}
+                        className={classes.menuButton}
+                    >
+                        <MenuIcon style={{fontSize: "3.1875rem"}}/>
+                    </IconButton>
+                    <Grid alignItems={"center"} style={{textAlign: "center"}} container>
+                        <Grid xs={9} md={10} item>
+                            10
+                        </Grid>
+                        <Grid xs={1} md={1} item>
+                            1
+                        </Grid>
+                        <Grid xs={2} md={1} item>
                             <IconButton
                                 color="inherit"
                                 aria-label="open drawer"
-                                onClick={handleDrawerOpen}
                                 edge="start"
+                                onClick={handleDrawerToggle}
                             >
-                                {!open ? <MenuIcon/> : <ChevronRightIcon/>}
+                                <AvatarStatus size={"3rem"}/>
                             </IconButton>
-                        </Grid>
-                        <Grid md={7} xs={6} item/>
-                        <Grid md={2} xs={4} item>
-                            <Typography style={{fontSize: "calc(4px + 1vw)"}} dir={"ltr"} variant="h6" noWrap>
-                                Mini variant drawer
-                            </Typography>
                         </Grid>
                     </Grid>
                 </Toolbar>
             </AppBar>
-            <Drawer
-                variant="permanent"
-                className={clsx(classes.drawer, {
-                    [classes.drawerOpen]: open,
-                    [classes.drawerClose]: !open,
-                })}
-                classes={{
-                    paper: clsx(classes.drawerPaper, {
-                        [classes.drawerOpen]: open,
-                        [classes.drawerClose]: !open,
-                    }),
-                }}
-            >
-
-                {open ? <div className={classes.toolbar}>
-                    <div style={{
-                        width: "100%", display: "flex",
-                        alignItems: "center"
-                    }}>
-                        <AvatarStatus status={appReducer.status}/>
-                        <Typography variant={"caption"} style={{padding: 5}}>سیدمحمدرضاشوبیری</Typography>
-                    </div>
-                </div> : <div style={{padding: 23}}/>}
-                <Divider/>
-                <ListItem button onClick={() => {
-                    handleExpand("expandGroup")
-                }}>
-                    <ListItemIcon className={classes.drawerIcon}>
-                        <GroupWork/>
-                    </ListItemIcon>
-                    <ListItemText primary="گروه ها"/>
-                    {expandGroup ? <ExpandLess/> : <ExpandMore/>}
-                </ListItem>
-                <Collapse in={expandGroup} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                        <ListItem button>
-                            <ListItemIcon className={classes.drawerIconChild}>
-                                #
-                            </ListItemIcon>
-                            <Typography variant={"body2"}>اقدامات(ACM)</Typography>
-                        </ListItem>
-                    </List>
-                </Collapse>
-                <Divider/>
-                <ListItem button onClick={() => {
-                    handleExpand("expandPM")
-                }}>
-                    <ListItemIcon className={classes.drawerIcon}>
-                        <Message/>
-                    </ListItemIcon>
-                    <ListItemText primary="پیام خصوصی"/>
-                    {expandPM ? <ExpandLess/> : <ExpandMore/>}
-                </ListItem>
-                <Collapse in={expandPM} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                        <ListItem button>
-                            <ListItemIcon className={classes.drawerIconChild}>
-                                <AvatarStatus size={27}/>
-                            </ListItemIcon>
-                            <Typography variant={"body2"}>علیرضا گودرزی</Typography>
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemIcon className={classes.drawerIconChild}>
-                                <AvatarStatus size={27}/>
-                            </ListItemIcon>
-                            <Typography variant={"body2"}>علیرضا گودرزی</Typography>
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemIcon className={classes.drawerIconChild}>
-                                <AvatarStatus size={27}/>
-                            </ListItemIcon>
-                            <Typography variant={"body2"}>علیرضا گودرزی</Typography>
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemIcon className={classes.drawerIconChild}>
-                                <AvatarStatus size={27}/>
-                            </ListItemIcon>
-                            <Typography variant={"body2"}>علیرضا گودرزی</Typography>
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemIcon className={classes.drawerIconChild}>
-                                <AvatarStatus size={27}/>
-                            </ListItemIcon>
-                            <Typography variant={"body2"}>علیرضا گودرزی</Typography>
-                        </ListItem>
-                    </List>
-                </Collapse>
-                <Divider/>
-
-
-            </Drawer>
-        </>
-
+            <nav className={classes.drawer} aria-label="mailbox folders">
+                {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+                <Hidden mdUp implementation="css">
+                    <Drawer
+                        container={container}
+                        variant="temporary"
+                        anchor={theme.direction === 'rtl' ? 'left' : 'right'}
+                        open={mobileOpen}
+                        onClose={handleDrawerToggle}
+                        classes={{
+                            paper: classes.drawerPaper,
+                        }}
+                        ModalProps={{
+                            keepMounted: true, // Better open performance on mobile.
+                        }}
+                    >
+                        {drawer}
+                    </Drawer>
+                </Hidden>
+                <Hidden smDown implementation="css">
+                    <Drawer
+                        classes={{
+                            paper: classes.drawerPaper,
+                        }}
+                        variant="permanent"
+                        open
+                    >
+                        {drawer}
+                    </Drawer>
+                </Hidden>
+            </nav>
+            <main className={classes.content}>
+                <div className={classes.toolbar}/>
+                <Routes/>
+            </main>
+        </div>
     );
 }
 
-const mapStateToProps = state => ({
-    appReducer: state.appReducer,
-    open: state.appReducer.openDrawer
-});
-const mapDispatchToProps = dispatch => ({
-    setOpenDrawer: open => dispatch(setOpenDrawer(open)),
-});
-export default connect(mapStateToProps,mapDispatchToProps)(MiniDrawer)
+SideBar.propTypes = {
+    /**
+     * Injected by the documentation to work in an iframe.
+     * You won't need it on your project.
+     */
+    window: PropTypes.func,
+};
+
+export default SideBar;

@@ -2,6 +2,9 @@ import {createMuiTheme, responsiveFontSizes} from '@material-ui/core/styles'
 import {blue, indigo} from '@material-ui/core/colors'
 
 const theme = createMuiTheme({
+    typography: {
+        fontFamily: ['IranSans',]
+    },
     palette: {
         secondary: {
             main: blue[900]
@@ -11,21 +14,13 @@ const theme = createMuiTheme({
         }
     },
     direction: 'rtl',
-    typography: {
-
-        // Use the system font instead of the default Roboto font.
-        fontFamily: [
-            '"Yekan"',
-            'sans-serif'
-        ].join(',')
-    },
     overrides: {
+        MuiSvgIcon: {
+            root: {color: "rgba(۲۵۵,۲۵۵,۲۵۵,0.6)"},
+        },
         MuiTypography: {
-            body1: {
-                fontSize: '0.9rem'
-            },
-            body2: {
-                fontSize: '0.7rem'
+            root: {
+                color: "#ffffff",
             }
         },
         MuiToolbar: {
@@ -34,7 +29,11 @@ const theme = createMuiTheme({
                 paddingLeft: '16px !important'
             }
         },
-
+        MuiIconButton:{
+            root:{
+                padding:8
+            }
+        },
         MuiSlider: {
             root: {
                 color: "#ca0c85"
@@ -44,11 +43,11 @@ const theme = createMuiTheme({
 });
 
 // theme.typography.body1={
-//     [theme.breakpoints.up('xs')]: {
-//         fontSize: '0.9rem'
+//     [theme.breakpoints.up('md')]: {
+//         fontSize: '1.2rem'
 //     },
-//     [theme.breakpoints.up('sm')]: {
-//         fontSize: '1.1rem'
+//     [theme.breakpoints.down('md')]: {
+//         fontSize: '1.6rem'
 //     }
 // }
 export default (theme)
